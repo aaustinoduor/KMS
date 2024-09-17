@@ -1,0 +1,18 @@
+body {
+    background: lightblue;
+}
+
+label {
+    margin: 40px;
+    font-size: large;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#keyno {
+    background: rgb(76, 0, 255);
+}
+
+button {
+    margin: 20px;
+    ;
+}

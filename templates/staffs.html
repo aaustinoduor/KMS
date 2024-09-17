@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href={{ url_for("static",
+    filename="icons/favicon.ico" ) }} type="image/x-icon"> <link
+    rel="stylesheet" href={{ url_for("static", filename="css/staffs.css" ) }}>
+
+    <title>KeyMan</title>
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="header">
+        <label for="search">
+          <input type="text" name="search" id="search">
+        </label>
+        <button>New Staff</button>
+      </div>
+      <ul class="staffs_list">
+        <li class="staff">
+          <span class="col-no">No.</span>
+          <span class="col-staffno">Staff No.</span>
+          <span class="col-departmentno No">Department</span>
+          <span class="col-firstname">FirstName</span>
+          <span class="col-lastname">LastName</span>
+          <span class="col-nationalidno">National ID</span>
+          <span class="col-photo">Photo</span>
+          <span class="col-email">Email</span>
+          <span class="col-phone">Phone</span>
+          <span class="col-authorized">Authorised</span>
+        </li>
+        {% for staff in staffs %}
+
+        <li class="staff">
+          <span class="col-no">
+            {{staffs.index(staff) + 1}}
+          </span>
+          <span class="col-staffno" title={{staff.get('staff_no')}}>{{staff.get('staff_no')}}</span>
+          <span class="col-departmentno">{{staff.get('department_id')}}</span>
+          <span class="col-firstname">{{staff.get('first_name')}}</span>
+          <span class="col-lastname">{{staff.get('last_name')}}</span>
+          <span class="col-nationalidno">{{staff.get('national_id_no')}}</span>
+          <span class="col-photo">
+            {% if staff.get('photo') == "" %}
+            N/A
+            {% else %}
+            Available
+            {% endif %}
+          </span>
+          <span class="col-email" title={{staff.get('email')}}>{{staff.get('email')}}</span>
+          <span class="col-phone">{{staff.get('phone')}}</span>
+          <span class="col-authorized">
+            {% if staff.get('authorised') == True %}
+            Yes
+            {% else %}
+            No
+            {% endif %}
+          </span>
+        </li>
+        {% endfor %}
+        <li class="staff"></li>
+      </ul>
+    </div>
+  </body>
+</html>

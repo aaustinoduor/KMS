@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href={{ url_for("static",
+    filename="icons/favicon.ico" ) }} type="image/x-icon"> <link
+    rel="stylesheet" href={{ url_for("static", filename="css/users.css" ) }}>
+
+    <title>KeyMan</title>
+  </head>
+  <body>
+    <ul class="users_list">
+      <li class="user">
+        <span class="col-userid">UserID</span>
+        <span class="col-staffno">Staff No.</span>
+        <span class="col-username">UserName</span>
+      </li>
+      {% for user in users %}
+      <li class="user">
+        <span class="col-userid">{{user.get('user_id')}}</span>
+        <span class="col-staffno">{{user.get('staff_no')}}</span>
+        <span class="col-username">{{user.get('user_name')}}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

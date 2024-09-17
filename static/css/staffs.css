@@ -1,0 +1,55 @@
+@import url('common.css');
+
+.container {
+    display: flex;
+    width: fit-content;
+    margin-top: 40px;
+    flex-direction: column;
+}
+.container .header {
+    align-self: flex-end;
+    margin-right: 40px;
+}
+
+.staffs_list{
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    padding: 0px 40px;
+    flex-direction: column;
+}
+
+.staffs_list #user-profile {
+    height: 100px;
+    width: 100px;
+    left: 0;
+    position: absolute;
+}
+
+.staffs_list .staff{
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    display: grid;
+    column-gap: 4px;
+    align-items: center;
+    grid-template-columns: repeat(10, 90px);
+    grid-template-rows: 30px;
+}
+
+.staffs_list .staff:first-child {
+    border-top: 1px solid black;
+}
+
+.staffs_list .staff span {
+    overflow: hidden;
+    line-height: 30px;
+}
+.staffs_list .staff span:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+input[type="text"], input[type="search"] {
+    width: 150px;
+    border-radius: 3px;
+}

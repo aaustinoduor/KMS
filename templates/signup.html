@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href={{ url_for("static",
+    filename="icons/favicon.ico") }} type="image/x-icon"> <link rel="stylesheet"
+    href={{ url_for("static", filename="css/signin.css") }}>
+
+    <title>KeyMan</title>
+  </head>
+  <body>
+    <header>Make key management easy and efficient!</header>
+    <form action="/users" method="post">
+      <h2>Sign, up</h2>
+      <label for="staffno">
+        <p>Staff No {{name}}</p>
+        <select name="staffno" id="staffno">
+          {%for staff in staffs %}
+          <option value="{{staff.get('staff_no')}}">
+            {{staff.get('staff_no')}}
+          </option>
+          {% endfor %}
+        </select>
+      </label>
+      <label for="username">
+        <p>UserName</p>
+        <input required type="text" name="username" id="username" />
+      </label>
+      <label for="password">
+        <p>Password</p>
+        <input required type="password" name="password" id="password" />
+      </label>
+
+      <label for="rememberme">
+        <input type="checkbox" name="rememberme" id="rememberme" /> Remember me?
+      </label>
+
+      <button type="submit">Signup</button>
+
+      <a href="/signin">Already have an accout ?</a>
+    </form>
+  </body>
+</html>
