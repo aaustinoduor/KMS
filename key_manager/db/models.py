@@ -33,7 +33,7 @@ class User(BaseModel):
     username = mapped_column(String,unique=True, nullable=False)
     password = mapped_column(String, nullable=False)
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, password: str = None, username: str = None):
         self.user_id = uuid4().hex
         self.username = username
         self.password = password
