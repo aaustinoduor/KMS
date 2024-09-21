@@ -14,7 +14,7 @@ class Staff(BaseModel):
     department_id = mapped_column(String, unique=False, nullable=False)
     first_name = mapped_column(String, unique=False, nullable=False)
     last_name = mapped_column(String, unique=False, nullable=False)
-    national_id_no = mapped_column(String, unique=True, nullable=False)
+    nat_id = mapped_column(String, unique=True, nullable=False)
     photo = mapped_column(String, nullable=True)
     email = mapped_column(String, unique=True, nullable=False)
     phone = mapped_column(String, unique=True, nullable=False)
@@ -29,7 +29,7 @@ class User(BaseModel):
     __tablename__ = "users"
 
     user_id = mapped_column(String, primary_key=True)
-    # staff_no = mapped_column(ForeignKey("staffs.staff_no"), unique=True, nullable=False)
+    staff_no = mapped_column(ForeignKey("staffs.staff_no"), unique=True, nullable=False)
     username = mapped_column(String,unique=True, nullable=False)
     password = mapped_column(String, nullable=False)
 
@@ -44,8 +44,7 @@ class Department(BaseModel):
     __tablename__ = "departments"
 
     department_id = mapped_column(String, primary_key=True, unique=True)
-    department = mapped_column(String, nullable=False)
-    department_head = mapped_column(ForeignKey("staffs.staff_no"), nullable=True)
+    name = mapped_column(String, nullable=False)
     keys: Mapped[List["Key"]] = relationship(backref="department")
 
 
