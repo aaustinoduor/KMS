@@ -2,3 +2,4 @@
 flask_session/
 migrations/
 venv
+instance
