@@ -27,7 +27,7 @@ class DevConfig(BaseConfig):
     """"""
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/key_manager.db"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///key_manager.db"
 
 
 class ProdConfig(BaseConfig):
