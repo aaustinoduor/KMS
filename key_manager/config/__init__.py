@@ -17,10 +17,9 @@ class BaseConfig:
     DEBUG = False
     TESTING = False
     HOST = "127.0.0.1"
-    SESSION_TYPE = "cachelib"
-    # NPM_BIN_PATH = shutil.which("npm") or exit(-1)
+    SESSION_TYPE = "filesystem"
     logger.setLevel(logging.INFO)
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "64d11e0cbd5cd4669ad48db094d94292528fddfb4111745fadfe08b62003a9b4"
 
 

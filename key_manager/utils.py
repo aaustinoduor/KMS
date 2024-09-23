@@ -12,9 +12,9 @@ def check_password(pass_hash: str, password: str) -> bool:
     return checkpw(password.encode(), pass_hash.encode())
 
 
-def gen_uuid():
+def gen_id():
     """"""
-    return uuid4()
+    return uuid4().hex
 
 
 def str_to_uuid(uuid: str) -> UUID:
