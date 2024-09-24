@@ -7,16 +7,16 @@ from sqlalchemy.exc import SQLAlchemyError
 user_route = Blueprint("user_route", __name__, url_prefix="/api/users")
 
 
-@user_route.get("/<string:username>")
-def get_user(username: str):
+@user_route.get("/<string:user_id>")
+def get_user(user_id: str):
     """"""
     userSchema = UserSchema()
 
     try:
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(user_id=user_id).first()
 
         if user is None:
-            return jsonify(msg="User does not exist!")
+            return jsonify(msg=f"User {user_id} does not exist!")
 
         serialized_user = userSchema.dump(user)
 
@@ -65,29 +65,29 @@ def new_user():
         return jsonify(msg="User added successfully!", success=True), 201
 
 
-@user_route.delete("/<string:username>")
-def delete_user(username: str):
+@user_route.delete("/<string:user_id>")
+def delete_user(user_id: str):
     """"""
     try:
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(user_id=user_id).first()
 
         if user is None:
-            return jsonify(msg=f"User does not exist!", success=False)
+            return jsonify(msg=f"User {user_id} does not exist!", success=False)
 
         flask_db.session.delete(user)
 
     except SQLAlchemyError:
         flask_db.session.rollback()
-        jsonify(msg=f"Couldn't delete user {username}!", success=False), 500
+        jsonify(msg=f"Couldn't delete user {user_id}!", success=False), 500
 
     else:
         flask_db.session.commit()
-        return jsonify(msg=f"User {username} deleted successfully!", success=True), 200
+        return jsonify(msg=f"User {user_id} deleted successfully!", success=True), 200
 
 
-@user_route.put("")
-@user_route.patch("")
-def update_user():
+@user_route.put("<string:user_id>")
+@user_route.patch("<string:user_id>")
+def update_user(user_id: str):
     """"""
     user_update_schema = UserUpdateSchema()
 
@@ -95,19 +95,18 @@ def update_user():
         jsonify(msg="Request must be json!", success=False), 400
 
     try:
-        updated_user = user_update_schema.dump(user_update_schema.load(request.json))
-        username = updated_user["username"]
-        user = User.query.filter_by(username=username).first()
+        updated_user = user_update_schema.load(request.json)
+        user = User.query.filter_by(user_id=user_id).first()
 
         if user is None:
-            return jsonify(msg=f"Could not update user {username}! User does not exist!", success=False)
+            return jsonify(msg=f"Could not update user {user_id}! User does not exist!", success=False)
 
         user.update(updated_user)
 
     except SQLAlchemyError:
         flask_db.session.rollback()
-        return jsonify(msg=f"Could not update user {username}!", success=False), 500
+        return jsonify(msg=f"Could not update user {user_id}!", success=False), 500
 
     else:
         flask_db.session.commit()
-        return jsonify(msg="User updated successfully!", success=True), 200
+        return jsonify(msg=f"User {user_id} updated successfully!", success=True), 200

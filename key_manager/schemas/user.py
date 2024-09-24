@@ -14,13 +14,13 @@ class UserSchema(ma.SQLAlchemySchema):
     twofa_enabled = auto_field()
     created_at = auto_field()
     updated_at = auto_field()
+    roles = fields.Nested("RoleSchema", dump_only=True)
 
     class Meta:
         include_fk = True
         model = models.User
         load_instance = True
         include_relationships = True
-        exclude = ("user_id",)
 
 
 class UserCreationSchema(Schema):
@@ -53,9 +53,8 @@ class UserCreationSchema(Schema):
         if 'password' in data:
             salt = gensalt()
             data['password'] = hashpw(data['password'].encode(), salt).decode()
-            data["user_id"] = gen_id()
 
-        return User(**data)
+        return User(user_id=gen_id(), **data)
 
 
 class UserUpdateSchema(Schema):

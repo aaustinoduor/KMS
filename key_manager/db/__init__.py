@@ -1,7 +1,7 @@
 import datetime as dt
-from sqlalchemy import DateTime
 from sqlalchemy.orm import mapped_column
 from key_manager.extensions import flask_db
+from sqlalchemy import DateTime, String, ForeignKey, Column, Table
 
 
 class BaseModel(flask_db.Model):
@@ -35,3 +35,10 @@ class BaseModel(flask_db.Model):
     def all(cls):
         """Return all records of the model."""
         return cls.query.all()
+
+
+# Association table for many-to-many relationship between users and roles
+user_roles = Table('user_roles', BaseModel.metadata,
+                   Column('user_id', String, ForeignKey('users.user_id')),
+                   Column('role_id', String, ForeignKey('roles.role_id'))
+                   )

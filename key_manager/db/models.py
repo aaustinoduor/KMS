@@ -1,10 +1,27 @@
-from uuid import uuid4
 import datetime as dt
 from typing import List
 from key_manager.utils import gen_id
-from key_manager.db import BaseModel
+from key_manager.db import BaseModel, user_roles
 from sqlalchemy.orm import Mapped, mapped_column, Relationship
 from sqlalchemy import Integer, Numeric, String, Boolean, ForeignKey, Date, DateTime
+
+
+class Role(BaseModel):
+    __tablename__ = 'roles'
+
+    role_id = mapped_column(String, primary_key=True, default=lambda: gen_id())
+    name = mapped_column(String, nullable=False, unique=True)
+    slug = mapped_column(String, nullable=False, unique=True)
+    description = mapped_column(String, nullable=True)
+    permissions = mapped_column(String, nullable=True)  # Can store as comma-separated values or JSON
+    access_level = mapped_column(Integer, nullable=False, default=1)
+    scope = mapped_column(String, nullable=True)  # E.g., 'global', 'department-specific'
+    is_active = mapped_column(Boolean, default=True)
+
+    users = Relationship('User', secondary=user_roles, back_populates='roles')
+
+    def __repr__(self):
+        return f"<Role(name='{self.name}', access_level={self.access_level})>"
 
 
 class User(BaseModel):
@@ -18,6 +35,10 @@ class User(BaseModel):
 
     # Relationships
     staff: Mapped["Staff"] = Relationship(back_populates="user")
+    roles = Relationship('Role', secondary=user_roles, back_populates='users')
+
+    def __repr__(self):
+        return f"<User(username='{self.username}', email='{self.email}')>"
 
 
 class Staff(BaseModel):
@@ -46,7 +67,7 @@ class Department(BaseModel):
     __tablename__ = "departments"
 
     department_id = mapped_column(String, primary_key=True, default=lambda: gen_id())
-    name = mapped_column(String, nullable=False)
+    name = mapped_column(String, nullable=False, unique=True)
 
     # Relationships
     staffs: Mapped[List["Staff"]] = Relationship(back_populates="department")

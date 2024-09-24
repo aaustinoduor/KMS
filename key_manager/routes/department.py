@@ -1,10 +1,8 @@
 from key_manager.extensions import flask_db
-from flask import Blueprint, jsonify, request
 from key_manager.db.models import Department
-from key_manager.schemas.department import DepartmentSchema
+from flask import Blueprint, jsonify, request
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-
-from key_manager.utils import gen_id
+from key_manager.schemas.department import DepartmentSchema, DepartmentCreationSchema, DepartmentUpdateSchema
 
 department_route = Blueprint("department_route", __name__, url_prefix="/api/departments")
 
@@ -18,7 +16,7 @@ def get_department(department_id: str):
         department = Department.query.filter_by(department_id=department_id).first()
 
         if department is None:
-            return jsonify(msg="Department does not exist!")
+            return jsonify(msg=f"Department {department_id} does not exist!")
 
         serialized_department = departmentSchema.dump(department)
 
@@ -48,17 +46,13 @@ def get_departments():
 @department_route.post("")
 def new_department():
     """"""
-    departmentSchema = DepartmentSchema(exclude=("department_id",))
+    department_creation_Schema = DepartmentCreationSchema()
 
     if not request.is_json:
         jsonify(msg="Request must be json!", success=False), 400
 
     try:
-        request_data = departmentSchema.load(request.json)
-        department_data = departmentSchema.dump(request_data)
-
-        department = Department(department_id=gen_id(), **department_data)
-
+        department = department_creation_Schema.load(request.json)
         flask_db.session.add(department)
 
     except IntegrityError:
@@ -67,7 +61,7 @@ def new_department():
 
     else:
         flask_db.session.commit()
-        return jsonify(msg="Department added successfully!", success=True), 201
+        return jsonify(msg=f"Department {department.department_id} added successfully!", success=True), 201
 
 
 @department_route.delete("/<string:department_id>")
@@ -77,7 +71,7 @@ def delete_department(department_id: str):
         department = Department.query.filter_by(department_id=department_id).first()
 
         if department is None:
-            return jsonify(msg=f"Department does not exist!", success=False)
+            return jsonify(msg=f"Department {department_id} does not exist!", success=False)
 
         flask_db.session.delete(department)
 
@@ -94,21 +88,17 @@ def delete_department(department_id: str):
 @department_route.patch("/<string:department_id>")
 def update_department(department_id: str):
     """"""
-    departmentSchema = DepartmentSchema(exclude=("department_id",))
+    department_updated_schema = DepartmentUpdateSchema()
 
     if not request.is_json:
         jsonify(msg="Request must be json!", success=False), 400
 
     try:
-        updated_department = departmentSchema.dump(departmentSchema.load(request.json))
-        
+        updated_department = department_updated_schema.load(request.json)
         department = Department.query.filter_by(department_id=department_id).first()
 
         if department is None:
             return jsonify(msg=f"Could not update department {department_id}! Department does not exist!", success=False)
-
-        # Check and remove items from schema that are not to be updated by user
-        updated_department = {key: value for key, value in updated_department.items() if key in request.json}
 
         department.update(updated_department)
 
@@ -119,4 +109,4 @@ def update_department(department_id: str):
 
     else:
         flask_db.session.commit()
-        return jsonify(msg="Department updated successfully!", success=True), 200
+        return jsonify(msg=f"Department {department_id} updated successfully!", success=True), 200

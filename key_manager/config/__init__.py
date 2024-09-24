@@ -1,8 +1,6 @@
-import shutil
-import logging
+import os
+import tempfile
 from enum import StrEnum
-
-logger = logging.getLogger('waitress')
 
 
 class Env(StrEnum):
@@ -13,12 +11,11 @@ class Env(StrEnum):
 
 class BaseConfig:
     """"""
-    PORT = 3000
+    PORT = 5000
     DEBUG = False
     TESTING = False
     HOST = "127.0.0.1"
     SESSION_TYPE = "filesystem"
-    logger.setLevel(logging.INFO)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "64d11e0cbd5cd4669ad48db094d94292528fddfb4111745fadfe08b62003a9b4"
 
@@ -27,7 +24,7 @@ class DevConfig(BaseConfig):
     """"""
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///key_manager.db"
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(tempfile.gettempdir(), "key_manager.db")}"
 
 
 class ProdConfig(BaseConfig):

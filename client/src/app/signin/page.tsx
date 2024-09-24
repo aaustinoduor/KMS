@@ -13,21 +13,6 @@ export default function SignIn() {
 
                 <h2 className="text-center text-2xl font-bold text-gray-100">Login</h2>
 
-                <Button
-                    icon={<FcGoogle />}
-                    type="default"
-                    className="flex items-center justify-center gap-x-2 mb-5 bg-gray-700 text-gray-100 border-none hover:bg-gray-600"
-                    onClick={() => {
-                        // Handle Google sign-in logic here
-                    }}
-                >
-                    Sign in with Google
-                </Button>
-
-                <div className="relative flex justify-center my-2">
-                    <span className="block w-8 h-8 rounded-full border-[1px] border-gray-400
-                     text-sm text-gray-400 text-center leading-7 select-none">OR</span>
-                </div>
 
                 <label className="flex flex-col gap-y-2">
                     <span>Email</span>
@@ -58,8 +43,8 @@ export default function SignIn() {
                         flex justify-center items-center bg-none"
                     >
                         {showPassword ?
-                            <HidePasswordIcon fill="black" /> :
-                            <ShowPasswordIcon fill="black" />}
+                            <HidePasswordIcon fill="orange" /> :
+                            <ShowPasswordIcon fill="orange" />}
                     </button>
                 </label>
 
@@ -69,6 +54,10 @@ export default function SignIn() {
                 >
                     Login
                 </Button>
+
+                <div>
+                    <button type="button">Forgot Password?</button>
+                </div>
 
             </form>
         </main>

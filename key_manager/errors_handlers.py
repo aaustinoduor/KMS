@@ -13,7 +13,7 @@ def handle_not_found_request(e):
 
 def handle_internal_server_error_request(e):
     """"""
-    return jsonify(success=False, msg="An Error has occurred! Please try again later."), 404
+    return jsonify(success=False, msg="An Error has occurred! Please try again later."), 500
 
 
 def handle_validation_error(e):
@@ -21,4 +21,4 @@ def handle_validation_error(e):
 
 
 def handle_database_error(e):
-    return str(e), 400
+    return str(e), 500

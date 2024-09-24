@@ -1,20 +1,31 @@
 import re
 from key_manager.db import models
-from key_manager.db.models import Staff, User
+from key_manager.db.models import Staff
 from key_manager.extensions import ma
-from marshmallow import fields, Schema, validates, ValidationError, post_load
+from marshmallow import fields, Schema, validates, ValidationError, post_load, post_dump
 
 
 class StaffSchema(ma.SQLAlchemyAutoSchema):
     """"""
     user = fields.Nested("UserSchema")
+    department = fields.Nested("DepartmentSchema")
+    full_name = fields.Method("get_fullname", dump_only=True)
+
+    def get_fullname(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+    @post_dump
+    def remove_name_fields(self, data, **kwargs):
+        data.pop('first_name', None)
+        data.pop('last_name', None)
+        return data
 
     class Meta:
         include_fk = True
         model = models.Staff
         load_instance = True
         include_relationships = True
-        exclude = ("user_id", "staff_id")
+        exclude = ("user_id", "department_id")
 
 
 class StaffCreationSchema(Schema):
@@ -40,8 +51,7 @@ class StaffCreationSchema(Schema):
     @post_load
     def make_staff(self, data, **kwargs):
         """"""
-        data["user_id"] = data["user"].user_id
-        return Staff(**data)
+        return Staff(user_id=data["user"].user_id, **data)
 
 
 class StaffUpdateSchema(Schema):
@@ -55,7 +65,6 @@ class StaffUpdateSchema(Schema):
     phone = fields.String(required=False)
     email = fields.String(required=False)
     authorised = fields.Boolean(required=False)
-    user = fields.Nested("UserUpdateSchema")
 
     @post_load
     def make_staff(self, data, **kwargs):
