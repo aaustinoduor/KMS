@@ -1,0 +1,6 @@
+[submodule "kms-service"]
+	path = kms-service
+	url = https://github.com/aaustinoduor/kms-service
+[submodule "kms-client"]
+	path = kms-client
+	url = https://github.com/aaustinoduor/kms-client
